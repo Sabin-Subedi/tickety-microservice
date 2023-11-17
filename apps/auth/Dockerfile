@@ -20,7 +20,7 @@ WORKDIR /app
 
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
-COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/json/. .
 # Install dependencies
 COPY --from=builder /app/out/pnpm-lock.yaml* /app/out/pnpm-workspace.yaml*  ./
 RUN yarn global add pnpm && pnpm i --frozen-lockfile
@@ -28,7 +28,7 @@ RUN yarn global add pnpm && pnpm i --frozen-lockfile
 
 
 # Build the project and its dependencies
-COPY --from=builder /app/out/full/ app/
+COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
 RUN pnpm run build --filter=$APP_NAME
