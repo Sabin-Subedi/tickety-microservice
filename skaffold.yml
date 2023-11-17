@@ -1,0 +1,18 @@
+apiVersion: skaffold/v2beta15
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: sabin/auth
+      context: .
+      docker:
+        dockerfile: ./apps/auth/Dockerfile
+      sync:
+        manual:
+          - src: './apps/auth/src/**/*.ts'
+            dest: .
