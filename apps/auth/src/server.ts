@@ -8,8 +8,11 @@ import { signOutRouter } from "routes/signout";
 import { signUpRouter } from "routes/signup";
 import { errorHandler } from "middlewares/error-handler";
 import { NotFoundError } from "errors/not-found-error";
+import mongoose from "mongoose";
 
-export const createServer: () => Express = () => {
+const port = process.env.PORT || 3000
+
+export const createServer = async () => {
   const app = express();
   app
     .disable("x-powered-by")
@@ -29,5 +32,14 @@ export const createServer: () => Express = () => {
 
     app.use(errorHandler)
 
-  return app;
+    try{
+      await mongoose.connect('mongodb://auth-mongo-srv:27017/auth',{})
+      console.log('Connected to MongoDB')
+    }catch(err){
+      console.log(err)
+    }
+
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}!`);
+  })
 };
