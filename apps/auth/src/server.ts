@@ -15,7 +15,11 @@ export const createServer: () => Express = () => {
     })
     .get("/healthz", (req, res) => {
       return res.json({ ok: true });
-    });
+    })
+
+    app.get('/api/users/currentuser', (req, res) => {
+      res.send('Hi there!');
+    })
 
   return app;
 };

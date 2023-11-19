@@ -4,8 +4,8 @@
     "outDir": "./dist",
     "rootDir": ".",
     "baseUrl": "./src",
-    "types": ["node","express"]
+    "types": ["node", "express"]
   },
-  "exclude": ["node_modules","./src/**/*.spec.ts","./src/**/*.test.ts"],
+  "exclude": ["node_modules", "./src/**/*.spec.ts", "./src/**/*.test.ts"],
   "include": ["./src/**/*.ts"]
 }

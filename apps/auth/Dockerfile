@@ -1,6 +1,7 @@
 FROM node:18-alpine AS base
 
-ENV APP_NAME=auth
+# The web Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
+# Make sure you update this Dockerfile, the Dockerfile in the web workspace and copy that over to Dockerfile in the docs.
 
 FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -10,7 +11,7 @@ RUN apk update
 WORKDIR /app
 RUN yarn global add turbo
 COPY . .
-RUN turbo prune $APP_NAME --docker
+RUN turbo prune auth --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
@@ -20,18 +21,22 @@ WORKDIR /app
 
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
-COPY --from=builder /app/out/json/. .
-# Install dependencies
-COPY --from=builder /app/out/pnpm-lock.yaml* /app/out/pnpm-workspace.yaml*  ./
-RUN yarn global add pnpm && pnpm i --frozen-lockfile
-
-
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/yarn.lock ./yarn.lock
+RUN yarn install
 
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-RUN pnpm run build --filter=$APP_NAME
+# Uncomment and use build args to enable remote caching
+# ARG TURBO_TEAM
+# ENV TURBO_TEAM=$TURBO_TEAM
+
+# ARG TURBO_TOKEN
+# ENV TURBO_TOKEN=$TURBO_TOKEN
+
+RUN yarn turbo run build --filter=auth...
 
 FROM base AS runner
 WORKDIR /app
@@ -40,6 +45,7 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 expressjs
 RUN adduser --system --uid 1001 expressjs
 USER expressjs
-COPY --from=installer /app .
 
-CMD node apps/$APP_NAME/dist/index.js
+COPY --from=installer /app/ .
+
+CMD node apps/auth/dist/src/index.js

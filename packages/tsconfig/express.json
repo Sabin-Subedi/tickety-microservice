@@ -1,6 +1,7 @@
 {
   "extends": "./base.json",
   "compilerOptions": {
+    "importHelpers":false,
     "esModuleInterop": true,
     "module": "commonjs",
     "types": ["node"],
