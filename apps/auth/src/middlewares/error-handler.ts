@@ -6,6 +6,8 @@ import { Result, ValidationError } from "express-validator";
 
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+    console.log(err.message);
+    
     if(err instanceof CustomError){
         return res.status(err.statusCode).send({ errors:err.serializeErrors() });
     }
