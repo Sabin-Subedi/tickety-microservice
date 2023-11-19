@@ -1,4 +1,5 @@
 import express, {Express} from "express";
+import 'express-async-errors'
 import morgan from "morgan";
 import cors from "cors";
 import { currentUserRouter } from "routes/current-user";
