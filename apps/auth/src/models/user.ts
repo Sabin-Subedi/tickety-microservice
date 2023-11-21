@@ -5,7 +5,9 @@ interface UserAttrs {
   email: string;
   password: string;
 }
-interface UserDoc extends Document, UserAttrs {}
+interface UserDoc extends Document, UserAttrs {
+  comparePassword(candidatePassword: string): Promise<boolean>;
+}
 
 interface UserModel extends Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
