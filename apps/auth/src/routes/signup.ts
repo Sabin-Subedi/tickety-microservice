@@ -1,9 +1,10 @@
-import { BadRequestError } from "errors/bad-request-error";
-import { RequestValidationError } from "errors/request-validation-error";
 import { Request, Response, Router } from "express";
 import { body, matchedData, validationResult } from "express-validator";
-import User from "models/user";
+
 import jwt from "jsonwebtoken";
+import { BadRequestError } from "~/errors/bad-request-error";
+import { RequestValidationError } from "~/errors/request-validation-error";
+import User from "~/models/user";
 
 const router = Router();
 

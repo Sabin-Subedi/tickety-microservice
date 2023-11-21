@@ -3,8 +3,13 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": ".",
-    "baseUrl": "./src",
-    "types": ["node", "express"]
+    "baseUrl": ".",
+    "target": "es2022",
+    "types": ["node", "express"],
+    "lib": ["es2022", "dom"],
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
   "exclude": ["node_modules", "./src/**/*.spec.ts", "./src/**/*.test.ts"],
   "include": ["./src/**/*.ts"]
